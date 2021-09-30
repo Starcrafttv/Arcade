@@ -1,46 +1,45 @@
-import numpy as np
 import random
 import pygame
 import app
 pygame.init()
 
 HEIGHT = 800
-WEIDTH = 400
+WIDTH = 400
 FPS = 30
 PLAYER_VEL = 7
-PLATFORM_WEIDTH = 50
+PLATFORM_WIDTH = 50
 PLATFORM_HEIGHT = 5
 font_score = pygame.font.SysFont('comicsans', 30)
 
 clock = pygame.time.Clock()
 
 
-class player(object):
+class Player(object):
 
     def __init__(self):
         self.score = 0
         self.height = 40
-        self.weidth = 15
-        self.x = round(WEIDTH/2)
+        self.width = 15
+        self.x = round(WIDTH / 2)
         self.y = 300
         self.jump_height = 20
         self.counter = self.jump_height*2
 
     def draw(self, screen):
-        Score_txt = font_score.render(
+        score_txt = font_score.render(
             'Score: ' + str(round(self.score/10)), 1, (0, 0, 0))
-        screen.blit(Score_txt, (10, 15))
+        screen.blit(score_txt, (10, 15))
         pygame.draw.rect(screen, (0, 255, 0),
-                         (self.x, self.y, self.weidth, self.height))
+                         (self.x, self.y, self.width, self.height))
 
     def move_x(self, input):
         if input == 0:
-            if self.x + PLAYER_VEL + 15 > WEIDTH:
+            if self.x + PLAYER_VEL + 15 > WIDTH:
                 self.x = 0
             self.x += PLAYER_VEL
         else:
             if self.x - PLAYER_VEL < 0:
-                self.x = WEIDTH-15
+                self.x = WIDTH - 15
             self.x -= PLAYER_VEL
 
     def move_y(self, platforms_pos):
@@ -66,29 +65,29 @@ class player(object):
                         self.y += 1*n
                 for platform in platforms_pos:
                     if self.y+self.height == platform[1] and self.counter > self.jump_height:
-                        if self.x >= platform[0] and self.x <= platform[0]+PLATFORM_WEIDTH:
+                        if platform[0] <= self.x <= platform[0]+PLATFORM_WIDTH:
                             self.counter = 0
-                        elif self.x+self.weidth >= platform[0] and self.x+self.weidth <= platform[0]+PLATFORM_WEIDTH:
+                        elif platform[0] <= self.x+self.width <= platform[0]+PLATFORM_WIDTH:
                             self.counter = 0
-        return(platforms_pos)
+        return platforms_pos
 
 
-class platforms(object):
+class Platforms(object):
 
     def __init__(self):
         self.platforms = []
-        self.platforms.append([round(WEIDTH/2)-10, round(HEIGHT/4*3)+40])
+        self.platforms.append([round(WIDTH / 2) - 10, round(HEIGHT / 4 * 3) + 40])
 
     def draw(self, screen):
         for part in self.platforms:
             pygame.draw.rect(screen, (0, 0, 0),
-                             (part[0], part[1], PLATFORM_WEIDTH, PLATFORM_HEIGHT))
+                             (part[0], part[1], PLATFORM_WIDTH, PLATFORM_HEIGHT))
 
     def get_platforms(self):
-        return(self.platforms)
+        return self.platforms
 
     def new_platform(self, y1, y2):
-        x = random.randint(0, WEIDTH-PLATFORM_WEIDTH)
+        x = random.randint(0, WIDTH - PLATFORM_WIDTH)
         y = random.randint(y1, y2)
         self.platforms.append([x, y])
 
@@ -101,32 +100,32 @@ class platforms(object):
                 self.new_platform(0, 90)
 
 
-class projectile(object):
+class Projectile(object):
     def __init__(self):
         self.projectiles = []
 
     def draw(self, screen):
-        for projectil in self.projectiles:
+        for projectile in self.projectiles:
             pygame.draw.circle(screen, (255, 0, 0),
-                               (projectil[0], projectil[1]), 5)
+                               (projectile[0], projectile[1]), 5)
 
     def shoot(self, x, y):
         self.projectiles.append([x, y])
 
     def move(self):
-        for projectil in self.projectiles:
-            if projectil[1] - 10 > 0:
-                projectil[1] -= 10
+        for projectile in self.projectiles:
+            if projectile[1] - 10 > 0:
+                projectile[1] -= 10
             else:
-                self.projectiles.remove(projectil)
+                self.projectiles.remove(projectile)
 
 
 def main(started_from_arcade):
-    screen = pygame.display.set_mode((WEIDTH, HEIGHT))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Doodle Jump")
-    player1 = player()
-    platforms1 = platforms()
-    projectile1 = projectile()
+    player1 = Player()
+    platforms1 = Platforms()
+    projectile1 = Projectile()
     for y in range(0, HEIGHT+200, 90):
         platforms1.new_platform(y, y+90)
     shoot_cd = 0

@@ -5,14 +5,14 @@ import app
 pygame.init()
 
 HEIGHT = 410
-WEIDTH = 370
+WIDTH = 370
 
 font_score = pygame.font.SysFont('comicsans', 30)
-font_vals = pygame.font.SysFont('comicsans', 60, True)
+font_values = pygame.font.SysFont('comicsans', 60, True)
 clock = pygame.time.Clock()
 
 
-class board_2048(object):
+class Board2048(object):
 
     def __init__(self):
         self.rows = 4
@@ -155,7 +155,7 @@ class board_2048(object):
                 elif self.board[1][i] == self.board[0][i]:
                     self.board[1][i] *= 2
                     self.board[0][i] = self.fill
-        return(True)
+        return True
 
     def spawn(self):
         spawned = False
@@ -179,10 +179,10 @@ class board_2048(object):
                 if self.board[i][j] == self.board[i+1][j] or self.board[i][j] == self.board[i-1][j] or self.board[i][j] == self.board[i][j+1] or self.board[i][j] == self.board[i][j-1]:
                     lost = False
                     break
-        return(lost)
+        return lost
 
     def get_score(self):
-        return(self.score)
+        return self.score
 
     def draw(self, screen):
         screen.fill((187, 173, 160))
@@ -197,45 +197,45 @@ class board_2048(object):
                 elif self.board[i][j] == 2:
                     pygame.draw.rect(screen, (238, 228, 218),
                                      (10+(j*90), 50+(i*90), 80, 80))
-                    val = font_vals.render(
+                    val = font_values.render(
                         str(self.board[i][j]), 1, (126, 114, 102))
                     screen.blit(val, (35+(j*90), 75+(i*90)))
                 elif self.board[i][j] == 4:
                     pygame.draw.rect(screen,  (236, 224, 201),
                                      (10+(j*90), 50+(i*90), 80, 80))
-                    val = font_vals.render(
+                    val = font_values.render(
                         str(self.board[i][j]), 1, (126, 114, 102))
                     screen.blit(val, (35+(j*90), 75+(i*90)))
                 elif self.board[i][j] == 8:
                     pygame.draw.rect(screen,  (242, 177, 121),
                                      (10+(j*90), 50+(i*90), 80, 80))
-                    val = font_vals.render(
+                    val = font_values.render(
                         str(self.board[i][j]), 1, (252, 240, 231))
                     screen.blit(val, (35+(j*90), 75+(i*90)))
                 elif self.board[i][j] == 16:
                     pygame.draw.rect(screen,  (248, 148, 99),
                                      (10+(j*90), 50+(i*90), 80, 80))
-                    val = font_vals.render(
+                    val = font_values.render(
                         str(self.board[i][j]), 1, (252, 240, 231))
                     screen.blit(val, (25+(j*90), 75+(i*90)))
                 elif self.board[i][j] == 32:
                     pygame.draw.rect(screen,  (244, 125, 93),
                                      (10+(j*90), 50+(i*90), 80, 80))
-                    val = font_vals.render(
+                    val = font_values.render(
                         str(self.board[i][j]), 1, (252, 240, 231))
                     screen.blit(val, (25+(j*90), 75+(i*90)))
                 else:
                     pygame.draw.rect(screen,  (244, 125, 93),
                                      (10+(j*90), 50+(i*90), 80, 80))
-                    val = font_vals.render(
+                    val = font_values.render(
                         str(self.board[i][j]), 1, (252, 240, 231))
                     screen.blit(val, (25+(j*90), 75+(i*90)))
 
 
 def main(started_from_arcade):
-    screen = pygame.display.set_mode((WEIDTH, HEIGHT))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("2048")
-    game_board = board_2048()
+    game_board = Board2048()
     run = True
     moved = False
     game_board.spawn()

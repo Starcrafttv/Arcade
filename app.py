@@ -9,7 +9,7 @@ pygame.init()
 
 GAMES = ["Snake", "Pong", "Tic Tac Toe", "Doodle Jump", "2048"]
 HEIGHT = len(GAMES)*65+35
-WEIDTH = 400
+WIDTH = 400
 font = pygame.font.SysFont('comicsans', 50)
 
 
@@ -22,7 +22,7 @@ def draw(screen):
 
 
 def main():
-    screen = pygame.display.set_mode((WEIDTH, HEIGHT))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Arcade")
 
     run = True
@@ -37,15 +37,15 @@ def main():
         mouse = pygame.mouse.get_pressed()
         if mouse[0]:
             pos = pygame.mouse.get_pos()
-            if pos[1] >= 0 and pos[1] < 100:
+            if 0 <= pos[1] < 100:
                 Snake.main(True)
-            elif pos[1] >= 100 and pos[1] < 165:
+            elif 100 <= pos[1] < 165:
                 Pong.main(True)
-            elif pos[1] >= 165 and pos[1] < 230:
+            elif 165 <= pos[1] < 230:
                 Tic_Tac_Toe.main(True)
-            elif pos[1] >= 230 and pos[1] < 295:
+            elif 230 <= pos[1] < 295:
                 Doodle_Jump.main(True)
-            elif pos[1] >= 295 and pos[1] < 360:
+            elif 295 <= pos[1] < 360:
                 two_forty_eight.main(True)
 
 

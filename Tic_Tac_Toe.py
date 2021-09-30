@@ -4,13 +4,13 @@ import app
 pygame.init()
 
 HEIGHT = 320
-WEIDTH = 280
+WIDTH = 280
 font_score = pygame.font.SysFont('comicsans', 30)
-font_vals = pygame.font.SysFont('comicsans', 60)
+font_values = pygame.font.SysFont('comicsans', 60)
 clock = pygame.time.Clock()
 
 
-class game_board_ttt(object):
+class GameBoardTTT(object):
     def __init__(self):
         self.rows = 3
         self.cols = 3
@@ -24,9 +24,9 @@ class game_board_ttt(object):
         if self.board[x][y] == self.fill:
             self.board[x][y] = player
             self.moves += 1
-            return (True)
+            return True
         else:
-            return(False)
+            return False
 
     def check_for_win(self):
         won = 0
@@ -44,14 +44,14 @@ class game_board_ttt(object):
 
         if won == 1:
             self.score[0] += 1
-            return (won)
+            return won
         elif won == 2:
             self.score[1] += 1
-            return (won)
+            return won
         elif self.moves == 9:
             return(3)
         else:
-            return(won)
+            return won
 
     def draw(self, screen):
         screen.fill((187, 173, 160))
@@ -66,12 +66,12 @@ class game_board_ttt(object):
                 elif self.board[i][j] == 1:
                     pygame.draw.rect(screen, (238, 228, 218),
                                      (10+(j*90), 50+(i*90), 80, 80))
-                    val = font_vals.render("X", 1, (126, 114, 102))
+                    val = font_values.render("X", 1, (126, 114, 102))
                     screen.blit(val, (35+(j*90), 75+(i*90)))
                 elif self.board[i][j] == 2:
                     pygame.draw.rect(screen, (238, 228, 218),
                                      (10+(j*90), 50+(i*90), 80, 80))
-                    val = font_vals.render("O", 1, (126, 114, 102))
+                    val = font_values.render("O", 1, (126, 114, 102))
                     screen.blit(val, (35+(j*90), 75+(i*90)))
 
     def reset(self):
@@ -81,9 +81,9 @@ class game_board_ttt(object):
 
 
 def main(started_from_arcade):
-    screen = pygame.display.set_mode((WEIDTH, HEIGHT))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Tic Tac Toe")
-    game_board = game_board_ttt()
+    game_board = GameBoardTTT()
     run = True
     player = 1
     while run:
@@ -102,21 +102,21 @@ def main(started_from_arcade):
             x = None
             y = None
 
-            if pos[0] >= 10 and pos[0] <= 90:
+            if 10 <= pos[0] <= 90:
                 x = 0
-            elif pos[0] >= 100 and pos[0] <= 180:
+            elif 100 <= pos[0] <= 180:
                 x = 1
-            elif pos[0] >= 190 and pos[0] <= 270:
+            elif 190 <= pos[0] <= 270:
                 x = 2
 
-            if pos[1] >= 60 and pos[1] <= 130:
+            if 60 <= pos[1] <= 130:
                 y = 0
-            elif pos[1] >= 140 and pos[1] <= 220:
+            elif 140 <= pos[1] <= 220:
                 y = 1
-            elif pos[1] >= 240 and pos[1] <= 310:
+            elif 240 <= pos[1] <= 310:
                 y = 2
 
-            if x != None and y != None:
+            if x is not None and y is not None:
                 if game_board.move(y, x, player):
                     if player == 1:
                         player = 2

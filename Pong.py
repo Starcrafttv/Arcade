@@ -5,32 +5,32 @@ pygame.init()
 
 
 HEIGHT = 500
-WEIDTH = 1000
+WIDTH = 1000
 FPS = 30
 PLAYER_HEIGHT = round(HEIGHT*0.077)
-PLAYER_WEIDTH = round(WEIDTH*0.00615)
+PLAYER_WIDTH = round(WIDTH * 0.00615)
 PLAYER_VEL = round(HEIGHT*0.0062*(30/FPS))
-BALL_X_VEL = round(WEIDTH*0.006*(30/FPS))
+BALL_X_VEL = round(WIDTH * 0.006 * (30 / FPS))
 BALL_RADIUS = round(HEIGHT*0.0077)
 
 font_score = pygame.font.SysFont('comicsans', 30)
 clock = pygame.time.Clock()
 
 
-class player(object):
-    def __init__(self, name, x, y, height, weidth, left=True):
+class Player(object):
+    def __init__(self, name, x, y, height, width, left=True):
         self.name = name
         self.x = x
         self.y = y
         self.x_start = x
         self.height = height
-        self.weidth = weidth
+        self.width = width
         self.vel = PLAYER_VEL
         self.score = 0
         if left:
             self.x_txt = 50
         else:
-            self.x_txt = WEIDTH-200
+            self.x_txt = WIDTH - 200
 
     def down(self):
         if self.y + self.vel + self.height - 3 < HEIGHT:
@@ -49,13 +49,13 @@ class player(object):
 
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), (self.x,
-                                                   self.y, self.weidth, self.height))
-        Score_txt = font_score.render(
+                                                   self.y, self.width, self.height))
+        score_txt = font_score.render(
             self.name+": " + str(self.score), 1, (255, 255, 255))
-        screen.blit(Score_txt, (self.x_txt, 10))
+        screen.blit(score_txt, (self.x_txt, 10))
 
 
-class ball(object):
+class Ball(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -64,7 +64,7 @@ class ball(object):
         start_vel = random.randint(0, 1)
         if start_vel == 1:
             self.x_vel *= -1
-        self.y_vel = random.uniform(-2.5, 2.5)  # Random inital y speed
+        self.y_vel = random.uniform(-2.5, 2.5)  # Random initial y speed
         self.radius = BALL_RADIUS
         self.counter = 0
 
@@ -84,7 +84,7 @@ class ball(object):
 
     def reset(self):
         self.counter = 0
-        self.x = WEIDTH//2
+        self.x = WIDTH // 2
         self.y = (HEIGHT-40)//2
         self.x_vel = BALL_X_VEL
         start_vel = random.randint(0, 1)
@@ -99,14 +99,14 @@ class ball(object):
 
 def main(started_from_arcade):
 
-    screen = pygame.display.set_mode((WEIDTH, HEIGHT))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Pong")
 
-    player1 = player("Player One", 15, (HEIGHT-35)//2,
-                     PLAYER_HEIGHT, PLAYER_WEIDTH, True)
-    player2 = player("Player Two", WEIDTH-25, (HEIGHT-35) //
-                     2, PLAYER_HEIGHT, PLAYER_WEIDTH, False)
-    play_ball = ball(WEIDTH//2, (HEIGHT-40)//2)
+    player1 = Player("Player One", 15, (HEIGHT - 35) // 2,
+                     PLAYER_HEIGHT, PLAYER_WIDTH, True)
+    player2 = Player("Player Two", WIDTH - 25, (HEIGHT - 35) //
+                     2, PLAYER_HEIGHT, PLAYER_WIDTH, False)
+    play_ball = Ball(WIDTH // 2, (HEIGHT - 40) // 2)
     run = True
     hit_cd = 0
     p1_mem = 0
@@ -147,15 +147,15 @@ def main(started_from_arcade):
         if play_ball.x - play_ball.radius < 5:
             play_ball.reset()
             player2.add_score()
-        elif play_ball.x + play_ball.radius > WEIDTH-5:
+        elif play_ball.x + play_ball.radius > WIDTH-5:
             play_ball.reset()
             player1.add_score()
 
-        if play_ball.x - play_ball.radius < player1.x + player1.weidth and play_ball.y > player1.y and play_ball.y < player1.y+player1.height and hit_cd == 0:
+        if play_ball.x - play_ball.radius < player1.x + player1.width and player1.y < play_ball.y < player1.y + player1.height and hit_cd == 0:
             play_ball.x_vel *= -1
             play_ball.y_vel += p1_mem
             hit_cd = 20
-        elif play_ball.x > player2.x - player2.weidth and play_ball.y > player2.y and play_ball.y < player2.y+player2.height and hit_cd == 0:
+        elif play_ball.x > player2.x - player2.width and player2.y < play_ball.y < player2.y + player2.height and hit_cd == 0:
             play_ball.x_vel *= -1
             play_ball.y_vel += p2_mem
             hit_cd = 20
@@ -167,9 +167,9 @@ def main(started_from_arcade):
             counter -= 1
 
         screen.fill((0, 0, 0))
-        pygame.draw.rect(screen, (255, 255, 255), (0, 35, WEIDTH, 2))
+        pygame.draw.rect(screen, (255, 255, 255), (0, 35, WIDTH, 2))
         pygame.draw.rect(screen, (255, 255, 255),
-                         ((WEIDTH-1)//2, 35, 2, HEIGHT))
+                         ((WIDTH - 1) // 2, 35, 2, HEIGHT))
         player1.draw(screen)
         player2.draw(screen)
         play_ball.draw(screen)

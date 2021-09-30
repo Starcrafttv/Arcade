@@ -2,10 +2,11 @@ import app
 import pygame
 import random
 import math
+
 pygame.init()
 
 HEIGHT = 600
-WEIDTH = 600
+WIDTH = 600
 FPS = 30
 clock = pygame.time.Clock()
 
@@ -13,13 +14,13 @@ ship_img = pygame.image.load('2019-11-29_Arcade/images/space_ship.png')
 ship_img = pygame.transform.scale(ship_img, (25, 25))
 ship_img = pygame.transform.rotate(ship_img, -50)
 TURN_SPEED = 8
-SHIP_ACCALERATION = 0.5
+SHIP_ACCELERATION = 0.5
 
 
-class space_ship(object):
+class SpaceShip(object):
     def __init__(self):
-        self.x = round(WEIDTH/2)
-        self.y = round(HEIGHT/2)
+        self.x = round(WIDTH / 2)
+        self.y = round(HEIGHT / 2)
         self.angle = 0
         self.x_velocity = 0
         self.y_velocity = 0
@@ -42,45 +43,46 @@ class space_ship(object):
             self.angle += 360
 
     def accelerate(self, input_direction=1):
-        self.x_velocity += SHIP_ACCALERATION * \
-            math.sin(math.radians(self.angle))*input_direction
-        self.y_velocity += SHIP_ACCALERATION * \
-            math.cos(math.radians(self.angle))*input_direction
+        self.x_velocity += SHIP_ACCELERATION * \
+                           math.sin(math.radians(self.angle)) * input_direction
+        self.y_velocity += SHIP_ACCELERATION * \
+                           math.cos(math.radians(self.angle)) * input_direction
 
         if abs(self.x_velocity) > 10:
-            tmp = self.x_velocity/abs(self.x_velocity)
+            tmp = self.x_velocity / abs(self.x_velocity)
             self.x_velocity = 10 * tmp
         if abs(self.y_velocity) > 10:
-            tmp = self.y_velocity/abs(self.y_velocity)
+            tmp = self.y_velocity / abs(self.y_velocity)
             self.y_velocity = 10 * tmp
 
     def move(self):
         for projectile in self.projectiles:
             projectile[0] -= projectile[2]
             projectile[1] -= projectile[3]
-            if projectile[0] < 0 and projectile[0] > WEIDTH:
+            if 0 > projectile[0] > WIDTH:
                 self.projectiles.remove(projectile)
-            elif projectile[1] < 0 and projectile[1] > HEIGHT:
+            elif 0 > projectile[1] > HEIGHT:
                 self.projectiles.remove(projectile)
 
         self.x += self.x_velocity
         self.y += self.y_velocity
 
         if self.x < 0:
-            self.x = WEIDTH-20
-        elif self.x > WEIDTH:
+            self.x = WIDTH - 20
+        elif self.x > WIDTH:
             self.x = 0
         if self.y < 0:
-            self.y = HEIGHT-20
+            self.y = HEIGHT - 20
         elif self.y > HEIGHT:
             self.y = 0
 
     def shoot(self):
         self.projectiles.append(
-            [self.x+25, self.y+25, self.x_velocity+30 * math.sin(math.radians(self.angle)), self.y_velocity+30*math.cos(math.radians(self.angle))])
+            [self.x + 25, self.y + 25, self.x_velocity + 30 * math.sin(math.radians(self.angle)),
+             self.y_velocity + 30 * math.cos(math.radians(self.angle))])
 
 
-class asteroids(object):
+class Asteroids(object):
     def __init__(self):
         self.asteroids = []
         # [[x1,y1],[x2,y2],[x3,y3],[x4,y4],[x5,y5],x_vel,y_vel,hp]
@@ -92,11 +94,11 @@ class asteroids(object):
 
     def new_asteroid(self):
         points = []
-        plus_x = random.randint(-1, 1)*350
-        plus_x = random.randint(-1, 1)*350
+        plus_x = random.randint(-1, 1) * 350
+        plus_y = random.randint(-1, 1) * 350
         for _ in range(5):
-            x = random.randint(WEIDTH/2-5, WEIDTH/+5)+plus_x
-            y = random.randint(HEIGHT/2-5, HEIGHT/+5)+plus_y
+            x = random.randint(int(WIDTH / 2 - 5), int(WIDTH / +5)) + plus_x
+            y = random.randint(int(HEIGHT / 2 - 5), int(HEIGHT / +5)) + plus_y
             points.append([x, y])
 
         x_vel = random.randint(-5, 5)
@@ -119,20 +121,21 @@ class asteroids(object):
             asteroid[4][1] += asteroid[6]
             asteroid[5][1] += asteroid[6]
 
-            if asteroid[0][0] < -100 or asteroid[0][0] > WEIDTH+100 or asteroid[0][1] < -100 or asteroid[0][1] > HEIGHT+100:
+            if asteroid[0][0] < -100 or asteroid[0][0] > WIDTH + 100 or asteroid[0][1] < -100 or asteroid[0][
+                1] > HEIGHT + 100:
                 self.asteroids.remove(asteroid)
 
 
 def main(started_from_arcade):
-    screen = pygame.display.set_mode((WEIDTH, HEIGHT))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Asteroids")
     run = True
 
     while run:
         started = False
         lost = False
-        player = space_ship()
-        asteroid = asteroids()
+        player = SpaceShip()
+        asteroid = Asteroids()
         while not started and run:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_SPACE]:
